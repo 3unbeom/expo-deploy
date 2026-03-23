@@ -22,7 +22,6 @@ runs:
     - run: |
         mkdir -p "${{ inputs.working-directory }}/fastlane"
         cp "${{ github.action_path }}/fastlane/Fastfile" "${{ inputs.working-directory }}/fastlane/"
-        cp "${{ github.action_path }}/fastlane/Appfile" "${{ inputs.working-directory }}/fastlane/"
       shell: bash
     - run: npm ci
       shell: bash
