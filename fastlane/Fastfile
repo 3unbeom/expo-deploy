@@ -1,0 +1,26 @@
+lane :deploy do
+  build_number = google_play_track_version_codes.max + 1
+  app_json = JSON.parse(File.read("../app.json"))
+  app_json["expo"]["android"]["versionCode"] = build_number
+  File.write("../app.json", JSON.pretty_generate(app_json) + "\n")
+  sh("cd .. && npx expo prebuild --platform android")
+  gradle(tasks: ["bundleRelease"], project_dir: "android")
+  supply(
+    track: "internal",
+    aab: "android/app/build/outputs/bundle/release/app-release.aab",
+    metadata_path: "fastlane/android",
+  )
+  supply(
+    track: "internal",
+    track_promote_to: "production",
+    skip_upload_aab: true,
+    skip_upload_metadata: true,
+    skip_upload_screenshots: true,
+    skip_upload_changelogs: true,
+  )
+  slack
+end
+
+error do |lane, exception|
+  slack(message: exception.message, success: false)
+end

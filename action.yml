@@ -1,0 +1,20 @@
+name: Expo Deploy
+description: Build and deploy Expo apps via Fastlane
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v6
+    - uses: jdx/mise-action@v4
+      with:
+        cache: false
+        mise_toml: |
+          [tools]
+          java = "17"
+          node = "24"
+          ruby = "3.4"
+          "gem:fastlane" = "latest"
+    - run: npm ci
+      shell: bash
+    - run: fastlane deploy
+      shell: bash
