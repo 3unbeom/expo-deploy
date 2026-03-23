@@ -1,6 +1,12 @@
 name: Expo Deploy
 description: Build and deploy Expo apps via Fastlane
 
+inputs:
+  working-directory:
+    description: 'Working directory for run steps'
+    required: false
+    default: '.'
+
 runs:
   using: 'composite'
   steps:
@@ -16,5 +22,7 @@ runs:
           "gem:fastlane" = "latest"
     - run: npm ci
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
     - run: fastlane deploy
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
