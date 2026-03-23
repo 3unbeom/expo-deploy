@@ -7,16 +7,9 @@ lane :deploy do
   gradle(tasks: ["bundleRelease"], project_dir: "android")
   supply(
     track: "internal",
+    track_promote_to: "production",
     aab: "android/app/build/outputs/bundle/release/app-release.aab",
     metadata_path: "fastlane/android",
-  )
-  supply(
-    track: "internal",
-    track_promote_to: "production",
-    skip_upload_aab: true,
-    skip_upload_metadata: true,
-    skip_upload_screenshots: true,
-    skip_upload_changelogs: true,
   )
   slack
 end
