@@ -5,7 +5,7 @@ lane :deploy do
   app_json["expo"]["android"]["versionCode"] = build_number
   File.write("../app.json", JSON.pretty_generate(app_json) + "\n")
   sh("cd .. && npx expo prebuild --platform android")
-  gradle(tasks: ["bundleRelease"], project_dir: "android")
+  gradle(task: "bundleRelease", project_dir: "android")
   supply(
     aab: "android/app/build/outputs/bundle/release/app-release.aab",
     metadata_path: "fastlane/android",
