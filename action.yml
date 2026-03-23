@@ -10,22 +10,9 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: jdx/mise-action@v4
-      with:
-        cache: false
-        mise_toml: |
-          [tools]
-          java = "17"
-          node = "24"
-          ruby = "3.4"
-          "gem:fastlane" = "latest"
     - run: |
-        mkdir -p "${{ inputs.working-directory }}/fastlane"
-        cp "${{ github.action_path }}/fastlane/Fastfile" "${{ inputs.working-directory }}/fastlane/"
-      shell: bash
-    - run: npm ci
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-    - run: fastlane deploy
+        npm ci
+        doppler setup -p flutter-deploy -c prd --no-interactive
+        doppler run -- fastlane deploy
       shell: bash
       working-directory: ${{ inputs.working-directory }}
