@@ -1,11 +1,13 @@
 lane :deploy do
-  build_number = google_play_track_version_codes.max + 1
   app_json = JSON.parse(File.read("../app.json"))
+  package_name = app_json["expo"]["android"]["package"]
+  build_number = google_play_track_version_codes(package_name: package_name).max + 1
   app_json["expo"]["android"]["versionCode"] = build_number
   File.write("../app.json", JSON.pretty_generate(app_json) + "\n")
   sh("cd .. && npx expo prebuild --platform android")
   gradle(tasks: ["bundleRelease"], project_dir: "android")
   supply(
+    package_name: package_name,
     track: "internal",
     track_promote_to: "production",
     aab: "android/app/build/outputs/bundle/release/app-release.aab",
