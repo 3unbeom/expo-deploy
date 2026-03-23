@@ -20,12 +20,9 @@ runs:
           ruby = "3.4"
           "gem:fastlane" = "latest"
     - run: |
-        rm -rf "${{ inputs.working-directory }}/fastlane"
-        cp -r "${{ github.action_path }}/fastlane" "${{ inputs.working-directory }}/fastlane"
-        echo "=== fastlane dir ==="
-        ls -la "${{ inputs.working-directory }}/fastlane/"
-        echo "=== pwd ==="
-        pwd
+        mkdir -p "${{ inputs.working-directory }}/fastlane"
+        cp "${{ github.action_path }}/fastlane/Fastfile" "${{ inputs.working-directory }}/fastlane/"
+        cp "${{ github.action_path }}/fastlane/Appfile" "${{ inputs.working-directory }}/fastlane/"
       shell: bash
     - run: npm ci
       shell: bash
