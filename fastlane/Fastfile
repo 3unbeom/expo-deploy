@@ -7,8 +7,6 @@ lane :deploy do
   sh("cd .. && npx expo prebuild --platform android")
   gradle(tasks: ["bundleRelease"], project_dir: "android")
   supply(
-    track: "internal",
-    track_promote_to: "production",
     aab: "android/app/build/outputs/bundle/release/app-release.aab",
     metadata_path: "fastlane/android",
   )
