@@ -1,9 +1,15 @@
+app_json = JSON.parse(File.read("../app.json"))
+package = app_json["expo"]["android"]["package"]
+
+File.write("Appfile", <<~APPFILE)
+  package_name "#{package}"
+APPFILE
+
 lane :deploy do
-  app_json = JSON.parse(File.read("../app.json"))
-  ENV["SUPPLY_PACKAGE_NAME"] = app_json["expo"]["android"]["package"]
   build_number = google_play_track_version_codes(track: "internal").max + 1
   app_json["expo"]["android"]["versionCode"] = build_number
   File.write("../app.json", JSON.pretty_generate(app_json) + "\n")
+  sh("pwd")
   sh("cd .. && npx expo prebuild --platform android")
   gradle(task: "bundleRelease", project_dir: "android")
   supply(
